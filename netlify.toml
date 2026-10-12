@@ -1,0 +1,8 @@
+[build]
+  command = "node netlify/build.mjs"
+  publish = "netlify/public"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

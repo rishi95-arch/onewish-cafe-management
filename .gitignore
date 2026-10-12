@@ -1,0 +1,11 @@
+target/
+netlify/public/
+.env
+.idea/
+.vscode/
+*.iml
+.DS_Store
+*.log
+*.war
+/netlify/site/
+/netlify/public-site.zip

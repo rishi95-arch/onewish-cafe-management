@@ -1,0 +1,3 @@
+package in.onewish.web;
+import in.onewish.dao.MenuDao;import jakarta.servlet.*;import jakarta.servlet.annotation.WebServlet;import jakarta.servlet.http.*;import java.io.IOException;
+@WebServlet("/item") public class ItemServlet extends HttpServlet {protected void doGet(HttpServletRequest q,HttpServletResponse s)throws ServletException,IOException{try{long id=Long.parseLong(q.getParameter("id"));var item=new MenuDao().find(id).orElse(null);if(item==null||!item.available()){s.sendError(404);return;}q.setAttribute("item",item);}catch(Exception e){s.sendError(404);return;}q.setAttribute("csrf",Web.csrf(q));q.getRequestDispatcher("/WEB-INF/views/item.jsp").forward(q,s);}}

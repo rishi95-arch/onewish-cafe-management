@@ -1,0 +1,6 @@
+package in.onewish.web;
+import in.onewish.config.Database;import jakarta.servlet.*;import jakarta.servlet.annotation.WebServlet;import jakarta.servlet.http.*;import org.mindrot.jbcrypt.BCrypt;import java.io.IOException;import java.sql.*;
+@WebServlet("/admin/login") public class AdminLoginServlet extends HttpServlet {
+ protected void doGet(HttpServletRequest q,HttpServletResponse s)throws ServletException,IOException{q.setAttribute("csrf",Web.csrf(q));q.getRequestDispatcher("/WEB-INF/views/admin-login.jsp").forward(q,s);}
+ protected void doPost(HttpServletRequest q,HttpServletResponse s)throws IOException{if(!Web.validCsrf(q)){s.sendError(403);return;}try(Connection c=Database.connect();PreparedStatement p=c.prepareStatement("SELECT id,password_hash FROM users WHERE email=? AND role='ADMIN' AND active=1")){p.setString(1,q.getParameter("email"));try(ResultSet r=p.executeQuery()){if(r.next()&&BCrypt.checkpw(q.getParameter("password"),r.getString(2))){q.getSession().invalidate();HttpSession session=q.getSession(true);session.setAttribute("adminId",r.getLong(1));session.setAttribute("csrf",java.util.UUID.randomUUID().toString());s.sendRedirect(q.getContextPath()+"/admin");return;}}}catch(Exception e){getServletContext().log("Admin login failed",e);}Web.flash(q,"Sign-in failed. Check your details.");s.sendRedirect(q.getContextPath()+"/admin/login");}
+}

@@ -1,0 +1,3 @@
+package in.onewish.web;
+import jakarta.servlet.*;import jakarta.servlet.annotation.WebListener;
+@WebListener public class CookieConfigListener implements ServletContextListener {public void contextInitialized(ServletContextEvent e){var cookies=e.getServletContext().getSessionCookieConfig();cookies.setHttpOnly(true);cookies.setSecure("true".equalsIgnoreCase(System.getenv("SESSION_COOKIE_SECURE")));String sameSite=System.getenv().getOrDefault("SESSION_COOKIE_SAME_SITE","Lax");if(!java.util.Set.of("Lax","Strict","None").contains(sameSite))throw new IllegalStateException("SESSION_COOKIE_SAME_SITE must be Lax, Strict, or None.");cookies.setAttribute("sameSite",sameSite);}}

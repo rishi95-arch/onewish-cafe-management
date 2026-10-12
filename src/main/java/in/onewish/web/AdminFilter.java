@@ -1,0 +1,3 @@
+package in.onewish.web;
+import jakarta.servlet.*;import jakarta.servlet.annotation.WebFilter;import jakarta.servlet.http.*;import java.io.IOException;
+@WebFilter("/admin/*") public class AdminFilter implements Filter {public void doFilter(ServletRequest req,ServletResponse res,FilterChain chain)throws IOException,ServletException{HttpServletRequest q=(HttpServletRequest)req;HttpServletResponse s=(HttpServletResponse)res;if(q.getRequestURI().endsWith("/admin/login")){chain.doFilter(req,res);return;}if(q.getSession(false)==null||q.getSession(false).getAttribute("adminId")==null){s.sendRedirect(q.getContextPath()+"/admin/login");return;}chain.doFilter(req,res);}}
